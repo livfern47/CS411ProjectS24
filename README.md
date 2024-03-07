@@ -1,8 +1,8 @@
 # CS411ProjectS24
 
-##Proposal 1: Apartment Selector
+## Proposal 1: Apartment Selector
 
-Our first proposed project will use [Boston 311 data] (https://data.boston.gov/dataset/311-service-requests/resource/e6013a93-1321-4f2a-bf91-8d8a02f1e62f) from 2023 to assign ratings to user-entered apartments, in order to make the renting process easier. Each user will have a profile which saves a User ID and the addresses and rating of all of the apartments they have entered into the application. It will display the best and most recent apartment that a given user has entered.
+Our first proposed project will use [Boston 311 data](https://data.boston.gov/dataset/311-service-requests/resource/e6013a93-1321-4f2a-bf91-8d8a02f1e62f) from 2023 to assign ratings to user-entered apartments, in order to make the renting process easier. Each user will have a profile which saves a User ID and the addresses and rating of all of the apartments they have entered into the application. It will display the best and most recent apartment that a given user has entered.
 
 In order to calculate this rating, we will use a variety of types of 311 data. They are semi-ranked as follows: squalid living conditions, poor conditions of property, unsatisfactory living conditions, no utilities(electricity, gas, water), chronic dampness or mold, heat - excessive insufficient, mice infestation, pest infestation, maintinence complaint, noise disturbance (automotive, dumpster and loading), loud parties/music/people, student overcrowding, sewage/septic back up, and unshoveled sidewalk. These complaint types are all contained in a single database, so should be relatively easy to access all at once, but if for any reason this list becomes too lengthy we will shorten it accordingly.
 
