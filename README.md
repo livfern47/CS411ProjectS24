@@ -1,5 +1,23 @@
 # CS411ProjectS24
 
+## UPDATE: Proposed Timeline
+
+### Backend
+1. Input Management:
+- Convert street address to lattitude/longitude using a map service
+2. API Management:
+- Search for all entries in database within 6 city blocks of the given address (one city block ~1/12 km, there are 111 km in one line of lattitude/longitude. Therefore a six block radius is 0.0045 degrees latitude/longitude)
+- Filter out irrelevant categories (relevent categories listed below)
+- Caculate rating
+3. Profile
+- Implement OAuth sign in
+- Keep track of a database of user info
+
+### Frontend
+1. Input location that takes street addresses as user input
+2. Menu to view all past entries and their ratings
+3. Profile editor and login
+
 ## Proposal 1: Apartment Selector
 
 Our first proposed project will use [Boston 311 data](https://data.boston.gov/dataset/311-service-requests/resource/e6013a93-1321-4f2a-bf91-8d8a02f1e62f) from 2023 to assign ratings to user-entered apartments, in order to make the renting process easier. Each user will have a profile which saves a User ID and the addresses and rating of all of the apartments they have entered into the application. It will display the best and most recent apartment that a given user has entered.
