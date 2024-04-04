@@ -25,13 +25,20 @@ def find_issues(address):
     # Should dump the dictionary into a string ("for posting")
     data_string = urllib.parse.urlparse(json.dumps(dataset_dict))
 
-    url = 'https://data.boston.gov/api/3/action/datastore_search'
+    url = 'https://data.boston.gov/api/3/action/datastore_search_sql?'
     headers = {'Authorization': 'df608ec0-f746-49a2-b91b-6d306742d07e'}
-    params = {'longitude' : -71.08691933926416}
-    
+    params = {
+        'resource_id' : 'e6013a93-1321-4f2a-bf91-8d8a02f1e62f',
+        }
+    lon1 = latlong["long"] - 0.000225
+    lon2 = latlong["long"] + 0.000225
+    lat1 = latlong["lat"] - 0.000225
+    lat2 = latlong["lat"] + 0.000225
+
+    sql_search ="sql=SELECT * FROM 'e6013a93-1321-4f2a-bf91-8d8a02f1e62f' WHERE longitude BETWEEN " + str(lon1) + " AND " + str(lon2)
 
     # Open the API (url found at Boston 311, marked Create)
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.get(url + sql_search)
     dict = response.json()
 
     # This should be the autorization key -- ???
