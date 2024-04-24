@@ -24,33 +24,35 @@ def find_issues(address):
     latlong = address_to_latlong(address)
     # Should dump the dictionary into a string ("for posting")
     data_string = urllib.parse.urlparse(json.dumps(dataset_dict))
+    print(latlong["long"])
+    lon1 = str((latlong["long"] + 0.000225)) 
+    lon2 = str(latlong["long"] - 0.000225) 
+    lon1 = "-71.03749937922044"
+    lon2 = "-71.03749937922046"
+    lat1 = latlong["lat"] + 0.000225
+    lat2 = latlong["lat"] - 0.000225
+    lat1= "42.36775149266105"
+    lat2 =  "42.36775149266103"
+    while len(lon1)<18:
+        lon1 = lon1+"0"
+    while len(lon2)<18:
+        lon2 = lon2+"0"
 
-    url = 'https://data.boston.gov/api/3/action/datastore_search_sql?'
-    headers = {'Authorization': 'df608ec0-f746-49a2-b91b-6d306742d07e'}
-    params = {
-        'resource_id' : 'e6013a93-1321-4f2a-bf91-8d8a02f1e62f',
-        }
-    lon1 = latlong["long"] - 0.000225
-    lon2 = latlong["long"] + 0.000225
-    lat1 = latlong["lat"] - 0.000225
-    lat2 = latlong["lat"] + 0.000225
+    # 14 decimal points
+    # SELECT * from "e6013a93-1321-4f2a-bf91-8d8a02f1e62f" WHERE ('lattitude' BETWEEN '-71.08692220816602' AND '-71.08692220816604') AND ('longitude' BETWEEN '42.29817900658342' AND '42.29817900658344')
 
-    sql_search ="sql=SELECT * FROM 'e6013a93-1321-4f2a-bf91-8d8a02f1e62f' WHERE longitude BETWEEN " + str(lon1) + " AND " + str(lon2)
-
-    # Open the API (url found at Boston 311, marked Create)
-    response = requests.get(url + sql_search)
-    dict = response.json()
-
-    # This should be the autorization key -- ???
-
-    # request.headers('Authorization', 'df608ec0-f746-49a2-b91b-6d306742d07e')
-
-
-    # Then, we make the HTTP request. We are asserting the response is 200 because that is
-    # CKAN's success marker
-    print(response.json())
-    # assert response.code == 200
-    return
+    params = urllib.parse.urlencode(dataset_dict, doseq=True)
+    url = 'https://data.boston.gov/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22e6013a93-1321-4f2a-bf91-8d8a02f1e62f%22%20WHERE%20%22longitude%22%20BETWEEN%20%27' + lon1 + '%27%20AND%20%27' + lon2 + '%27'
+    response = requests.get(url)
+    data = response.json()
+    filtered_data = []
+    for item in data['result']['records']:
+        if item['latitude'] < lat1 and item['latitude'] > lat2:
+            filtered_data.append(item)
+    
+    for item in filtered_data:
+        # The main work. gotta shower and stuff though 
+ 
 
 
 
@@ -97,4 +99,4 @@ def find_by_key(data, target):
 
 
 
-find_issues("98 Mountfort street, boston, 02215 massachusetts, united states of america")
+(find_issues("	19 Stanhope St Boston MA 02116 united states of america"))
