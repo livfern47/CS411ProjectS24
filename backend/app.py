@@ -3,8 +3,49 @@
 
 from api_interact import find_issues
 from flask import Flask, render_template
+import pyrebase
 
-app = Flask(__name__)
+firebaseConfig = {
+        'apiKey': "AIzaSyCmH1QKp1t4ygsNJ-63NbsRHGlWuxGy0",
+        'authDomain': "apartments-8578b.firebaseapp.com",
+        'projectId': "apartments-8578b",
+        'storageBucket': "apartments-8578b.appspot.com",
+        'messagingSenderId': "412201567680",
+        'appId': "1:412201567680:web:f53080566635a954187425",
+        'measurementId': "G-VR2EDWMR3X"
+}
+
+firebase = pyrebase.initialize_app(firebaseConfig)
+auth = firebase.auth()
+app = Flask(__name)
+
+def login():
+    email = input("Enter your email: ")
+    password = input("Enter your password: ")
+    try:
+        user = auth.sign_in_with_email_and_password(email, password)
+        print("Successfully signed in")
+    except:
+        print("Invalid email or password")
+        return False
+    return True
+
+def signup():
+    email = input("Enter your email: ")
+    password = input("Enter your password: ")
+    try:
+        user = auth.create_user_with_email_and_password(email, password)
+        print("Successfully signed up")
+    except:
+        print("Email already exists")
+        return False
+    return True
+
+ans = input("Do you have an account? (y/n): ")
+if ans == 'y':
+    login()
+else:
+    signup()
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
