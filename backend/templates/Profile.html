@@ -111,7 +111,7 @@
       class="button"><i class="fa fa-home fa-2x"></i></button>
 
     <button class="profile_btn" class="home_btn" id="Enter" type="button"
-      onclick="window.location.href = '{{ url_for('profile') }}' ; ">
+      onclick="window.location.href = '{{ url_for('profile') }}';">
       <i class="fa fa-user fa-2x"></i></button>
 
   </div>
@@ -119,6 +119,18 @@
   <div class="greeting">
     <h1><i class="fa fa-user fa-2x"></i> Hi {{name}}!</h1>
   </div>
+
+  <form action="{{ url_for('login') }}" method="post">
+    <input type="email" name="email" placeholder="Enter your email" required>
+    <input type="password" name="password" placeholder="Enter your password" required>
+    <button type="submit">Login</button>
+  </form>
+
+  <form action="{{ url_for('signup') }}" method="post">
+    <input type="email" name="email" placeholder="Enter your email" required>
+    <input type="password" name="password" placeholder="Enter your password" required>
+    <button type="submit">Signup</button>
+  </form>
 
   <div class="apt_list">
     {% for apt in apartments %}
