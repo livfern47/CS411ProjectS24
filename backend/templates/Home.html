@@ -112,9 +112,12 @@
   <body><i>Know the incident reports for your future home.</i></body>
 </div>
 
-<button class="home_btn"><i class="fa fa-home fa-2x"></i></button>
+<button class="home_btn" id="Enter" type="button" onclick="window.location.href = '{{ url_for('home') }}' ; "
+  class="button"><i class="fa fa-home fa-2x"></i></button>
 
-<button class="profile_btn"><i class="fa fa-user fa-2x"></i></button>
+<button class="profile_btn" class="home_btn" id="Enter" type="button"
+  onclick="window.location.href = '{{ url_for('profile') }}' ; ">
+  <i class="fa fa-user fa-2x"></i></button>
 
 <form id="form" role="search" class="search_bar">
   <input type="search" id="query" name="q" placeholder="Street address" aria-label="Search for apartmentß">
@@ -131,7 +134,9 @@
   const f = document.getElementById('form');
   const q = document.getElementById('query');
 
-  <!-- This is where the searched content will be sent to our backend to be processed. -->
+  function searchApartments(address) {
+
+  }
 </script>
 
 </body>

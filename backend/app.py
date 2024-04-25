@@ -6,7 +6,7 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def home():
     return render_template("Home.html")
 
@@ -18,3 +18,13 @@ def report():
     }  
     rating = 4
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
+
+@app.route("/profile")
+def profile():
+    name = "Oliver"
+    apartments = [{'address': "2 Hillside St",
+         'lon' : -71.0991603,
+         'lat': 42.3290705,
+         'rating': 4}]
+    
+    return render_template("Profile.html", name = name, apartments=apartments)

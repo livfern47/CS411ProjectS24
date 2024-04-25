@@ -77,6 +77,8 @@ def find_issues(address):
         'lat': latlong['lat'],
         'lon':latlong['long']
     }
+    print (value['lat'])
+    print(value['lon'])
     return value
 
 
