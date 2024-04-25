@@ -157,4 +157,4 @@ def find_by_key(data, target):
             return value
 
 
-find_issues_wrapper("2 Hillside St Mission Hill MA 02120")
+find_issues_wrapper(" MA 02120")
