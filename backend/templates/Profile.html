@@ -1,0 +1,165 @@
+<!-- Trying again with a better understanding of columns, I think... -->
+
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Page Title</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<html>
+
+<head>
+  <style>
+    body {
+      background-color: white;
+      font-family: 'monaco';
+      color: black;
+      min-height: 100%;
+      height: 100%;
+      margin: 15 px;
+
+    }
+
+    button {
+      all: unset;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      color: black;
+    }
+
+    button:hover {
+      color: grey;
+    }
+
+    .header {
+      background-color: white;
+      color: rgb(0, 0, 0);
+      padding: 30px;
+    }
+
+    .home_btn {
+      top: 3%;
+      left: 90%;
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .profile_btn {
+      top: 3%;
+      left: 95%;
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .greeting {
+      background-color: rgba(255, 153, 0, 0.764);
+      padding: 5px;
+      text-align: left;
+      padding-left: 30px;
+      margin-bottom: 10px;
+    }
+
+    #map-container {
+      height: 75%;
+      float: left;
+      width: 75%
+    }
+
+    #map {
+      position: absolute;
+      right: 10px;
+      height: 75%;
+      width: 75%;
+      border: 5px solid grey;
+    }
+
+    .marker {
+      background-image: "fa fa-map-marker";
+      background-size: cover;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .apt_list {
+      position: absolute;
+      top: 10;
+      border: 5px solid grey;
+      background-color: rgb(199, 199, 199);
+      padding: 15 px;
+      width: 20%;
+      height: 75%;
+      padding-left: 15px;
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <button class="home_btn" id="Enter" type="button" onclick="window.location.href = '{{ url_for('home') }}' ; "
+      class="button"><i class="fa fa-home fa-2x"></i></button>
+
+    <button class="profile_btn" class="home_btn" id="Enter" type="button"
+      onclick="window.location.href = '{{ url_for('profile') }}' ; ">
+      <i class="fa fa-user fa-2x"></i></button>
+
+  </div>
+
+  <div class="greeting">
+    <h1><i class="fa fa-user fa-2x"></i> Hi {{name}}!</h1>
+  </div>
+
+  <div class="apt_list">
+    {% for apt in apartments %}
+
+    <p> <i style="color: #2AD683" class="fa fa-map-marker"></i> {{apt['address']}}</p>
+    {% endfor %}
+  </div>
+
+  <div class="map-container">
+    <div id="map"></div>
+  </div>
+
+  <script>
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoibGl2ZmVybiIsImEiOiJjbHZkdHg1bDUwMm5xMmpwOW50ZXBxM3JjIn0.rBLXad0HeCeJpbTLiF99lA';
+    const map = new mapboxgl.Map({
+      container: 'map', // container ID
+      center: [-71.058083, 42.361145], // starting position [lng, lat]
+      zoom: 11.5 // starting zoom
+    });
+
+    // These markers will be created iteratively through the addresses that correspond with the user
+    var apartments = JSON.parse('{{apartments | tojson | safe }}')
+
+    for (let i = 0; i < apartments.length; i++) {
+      mkrclr = "#FF4E4E"
+      // if ((apartments[i]['rating']) > 7) {
+      //   mkrclr = "#2AD683"
+      // } else if ((apartments[i]['rating']) > 4) {
+      //   mkrclr = "#E1EF5C"
+      // }
+      const marker = new mapboxgl.Marker({
+        color: "#FF4E4E",
+        draggable: true
+      }).setLngLat([-71.0991603, 42.3290705])
+        .addTo(map);
+    }
+
+
+
+  </script>
+</body>
+
+</html>

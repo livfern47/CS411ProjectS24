@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>Page Title</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  body {
+    background-color: #7a5dc5;
+    margin: 200px 40%;
+  }
+
+  form {
+    background-color: #8168c1;
+    width: 300px;
+    height: 44px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  input {
+    all: unset;
+    font: 16px Tahoma;
+    color: #fff;
+    height: 100%;
+    width: 100%;
+    padding: 6px 10px;
+  }
+
+  ::placeholder {
+    color: #ffffff;
+    opacity: 0.7;
+  }
+
+  svg {
+    color: #fff;
+    fill: currentColor;
+    width: 24px;
+    height: 24px;
+    padding: 10px;
+  }
+
+  button {
+    all: unset;
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+  }
+
+  button:hover {
+    color: grey;
+  }
+
+  h1 {
+    font-size: 300%;
+    line-height: 150%;
+    font-family: Monaco;
+  }
+
+  body {
+    font-family: Monaco;
+    font-size: 100%;
+  }
+
+  .home_btn {
+    top: 5%;
+    left: 90%;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .profile_btn {
+    top: 5%;
+    left: 95%;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    z-index: 2;
+
+  }
+
+  .header {
+    position: absolute;
+    top: 15%;
+    left: 0;
+    right: 0;
+    background-color: #ffffff39;
+    padding: 20px;
+    text-align: center;
+
+  }
+
+  .search_bar {
+    margin: 0;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+  }
+</style>
+
+
+<div class="header">
+  <h1>Boston Apartment Satisfaction </h1>
+
+  <body><i>Know the incident reports for your future home.</i></body>
+</div>
+
+<button class="home_btn" id="Enter" type="button" onclick="window.location.href = '{{ url_for('home') }}' ; "
+  class="button"><i class="fa fa-home fa-2x"></i></button>
+
+<button class="profile_btn" class="home_btn" id="Enter" type="button"
+  onclick="window.location.href = '{{ url_for('profile') }}' ; ">
+  <i class="fa fa-user fa-2x"></i></button>
+
+<form id="form" role="search" class="search_bar">
+  <input type="search" id="query" name="q" placeholder="Street address" aria-label="Search for apartmentß">
+  <button>
+    <svg viewBox="0 0 1024 1024">
+      <path class="path1"
+        d="M848.471 928l-263.059-263.059c-48.941 36.706-110.118 55.059-177.412 55.059-171.294 0-312-140.706-312-312s140.706-312 312-312c171.294 0 312 140.706 312 312 0 67.294-24.471 128.471-55.059 177.412l263.059 263.059-79.529 79.529zM189.623 408.078c0 121.364 97.091 218.455 218.455 218.455s218.455-97.091 218.455-218.455c0-121.364-103.159-218.455-218.455-218.455-121.364 0-218.455 97.091-218.455 218.455z">
+      </path>
+    </svg>
+  </button>
+</form>
+
+<script>
+  const f = document.getElementById('form');
+  const q = document.getElementById('query');
+
+  function searchApartments(address) {
+
+  }
+</script>
+
+</body>
+
+</html>

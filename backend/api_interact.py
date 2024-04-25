@@ -81,15 +81,7 @@ def find_issues(address,key):
     hit_list_1 = [ "Bed Bugs", "Mice Infestation - Residential","Pest Infestation - Residential", "Chronic Dampness/Mold",
         "Unsatisfactory Living Conditions", 'Carbon Monoxide', "Heat - Excessive Insufficient"
         "Poor Conditions of Property", "Rat Bite", "Rodent Activity", "Squalid Living Conditions"]
-    hit_list = ["Aircraft Noise Disturbance", "Animal Noise Disturbances", "Automotive Noise Disturbance", 
-                "Bed Bugs", "Mice Infestation - Residential","Pest Infestation - Residential", "Chronic Dampness/Mold",
-                  "Unsatisfactory Living Conditions", 'Carbon Monoxide', 'Dumpster & Loading Noise Disturbances',
-                  "Heat - Excessive Insufficient", "Improper Storage of Trash (Barrels)", "Lead", "Loud Parties/Music/People",
-                  "No Utilities Residential - Gas", "No Utilities Residential - Electricity", "No Utilities Residential - Water",
-                  "Poor Conditions of Property", "Rat Bite", "Rodent Activity", "Squalid Living Conditions", "Student Move-in Issues",
-                  "Student Overcrowding", "Undefined Noise Disturbance", "Unsatisfactory Utilities - Electrical Plumbing", 
-                  "Unshoveled Sidewalk"
-                ]
+
     rating = 10
     for item in filtered_data:
         append = False
@@ -97,7 +89,7 @@ def find_issues(address,key):
             for issue in hit_list_25:
                 if item['type'] == issue:
                     append=True
-                    rating=-0.25
+                    rating-=0.25
         if not append: 
             for issue in hit_list_5:
                 if item['type'] == issue:
@@ -111,7 +103,6 @@ def find_issues(address,key):
         if append:
             report.append(item['type'] + " reported at " + item['location_street_name'] )
 
-    print(report, rating)
     value ={
         'issues': report,
         'lat': latlong['lat'],
@@ -146,7 +137,6 @@ def address_to_latlong (address):
     response = requests.get(url+geocoder_key, headers=headers, params=params)
     file = response.json()
     #print(find_by_key(file, "lat"))
-    print(type(file['features'][0]))
 
     latlong = {
         "long" : 0,
@@ -169,3 +159,4 @@ def find_by_key(data, target):
 
 
 
+#print(type(find_issues_wrapper("2 Hillside St Mission Hill MA 02120")['report2020']['rating']))
