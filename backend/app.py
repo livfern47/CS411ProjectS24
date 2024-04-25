@@ -16,7 +16,7 @@ def report():
     reports = {
         'report2023': find_issues(address),
     }  
-    rating = 4
+    rating = reports['report2023']['rating']
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
 
 @app.route("/profile")

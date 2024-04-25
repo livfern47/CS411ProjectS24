@@ -57,6 +57,13 @@ def find_issues(address):
     # -2 "Bed Bugs", "Mice Infestation - Residential","Pest Infestation - Residential", "Chronic Dampness/Mold",
         #"Unsatisfactory Living Conditions", 'Carbon Monoxide', "Heat - Excessive Insufficient"
         #"Poor Conditions of Property", "Rat Bite", "Rodent Activity", "Squalid Living Conditions"
+    hit_list_25 = ["Aircraft Noise Disturbance", "Animal Noise Disturbances", "Automotive Noise Disturbance", 
+                   'Dumpster & Loading Noise Disturbances', "Loud Parties/Music/People", "Undefined Noise Disturbance", "Unshoveled Sidewalk"]
+    hit_list_5 = ["Improper Storage of Trash (Barrels)", "No Utilities Residential - Gas", "No Utilities Residential - Electricity",
+                   "No Utilities Residential - Water", "Student Move-in Issues", "Student Overcrowding", "Unsatisfactory Utilities - Electrical Plumbing"]
+    hit_list_1 = [ "Bed Bugs", "Mice Infestation - Residential","Pest Infestation - Residential", "Chronic Dampness/Mold",
+        "Unsatisfactory Living Conditions", 'Carbon Monoxide', "Heat - Excessive Insufficient"
+        "Poor Conditions of Property", "Rat Bite", "Rodent Activity", "Squalid Living Conditions"]
     hit_list = ["Aircraft Noise Disturbance", "Animal Noise Disturbances", "Automotive Noise Disturbance", 
                 "Bed Bugs", "Mice Infestation - Residential","Pest Infestation - Residential", "Chronic Dampness/Mold",
                   "Unsatisfactory Living Conditions", 'Carbon Monoxide', 'Dumpster & Loading Noise Disturbances',
@@ -68,17 +75,32 @@ def find_issues(address):
                 ]
     rating = 10
     for item in filtered_data:
-        for issue in hit_list:
-            if item['type'] == issue:
-                report.append(item['type'] + " reported at " + item['location_street_name'] )
-    print(report)
+        append = False
+        if not append:
+            for issue in hit_list_25:
+                if item['type'] == issue:
+                    append=True
+                    rating=-0.25
+        if not append: 
+            for issue in hit_list_5:
+                if item['type'] == issue:
+                    append=True
+                    rating-=0.5
+        if not append:
+            for issue in hit_list_1:
+                if item['type'] == issue:
+                    append=True
+                    rating-=1
+        if append:
+            report.append(item['type'] + " reported at " + item['location_street_name'] )
+
+    print(report, rating)
     value ={
         'issues': report,
         'lat': latlong['lat'],
-        'lon':latlong['long']
+        'lon':latlong['long'],
+        'rating': rating
     }
-    print (value['lat'])
-    print(value['lon'])
     return value
 
 
