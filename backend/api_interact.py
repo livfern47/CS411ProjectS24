@@ -6,7 +6,24 @@ import requests
 from requests.structures import CaseInsensitiveDict
 
 
-def find_issues(address):
+
+def find_issues_wrapper(address):
+    key_2023 = ('2023', 'e6013a93-1321-4f2a-bf91-8d8a02f1e62f')
+    key_2022 = ('2022','81a7b022-f8fc-4da5-80e4-b160058ca207')
+    key_2021 = ('2021','f53ebccd-bc61-49f9-83db-625f209c95f5')
+    key_2020 = ('2020','6ff6a6fd-3141-4440-a880-6f60a37fe789')
+    key_2019 = ('2019','ea2e4696-4a2d-429c-9807-d02eb92e0222')
+
+    keys = [key_2019, key_2020, key_2021, key_2022, key_2023]
+    reports = {}
+    for year,key in keys:
+        report = find_issues(address, key)
+        reports['report' + year] = report
+
+    return reports
+
+
+def find_issues(address,key):
     # This method will take some address, find the longitude and lattitude
     # with the geocoder API, then search the 311 data for relevant hits within
     # one city block.
@@ -40,7 +57,7 @@ def find_issues(address):
     # SELECT * from "e6013a93-1321-4f2a-bf91-8d8a02f1e62f" WHERE ('lattitude' BETWEEN '-71.08692220816602' AND '-71.08692220816604') AND ('longitude' BETWEEN '42.29817900658342' AND '42.29817900658344')
 
     params = urllib.parse.urlencode(dataset_dict, doseq=True)
-    url = 'https://data.boston.gov/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22e6013a93-1321-4f2a-bf91-8d8a02f1e62f%22%20WHERE%20%22longitude%22%20BETWEEN%20%27' + lon1 + '%27%20AND%20%27' + lon2 + '%27'
+    url = 'https://data.boston.gov/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%22' + key + '%22%20WHERE%20%22longitude%22%20BETWEEN%20%27' + lon1 + '%27%20AND%20%27' + lon2 + '%27'
     response = requests.get(url)
     data = response.json()
     filtered_data = []
