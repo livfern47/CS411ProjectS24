@@ -17,7 +17,7 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
-app = Flask(__name)
+app = Flask(__name__)
 
 def login():
     email = input("Enter your email: ")
