@@ -2,7 +2,7 @@
 # CKAN API, used by Boston 311
 
 from api_interact import find_issues
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, flash
 import pyrebase
 
 firebaseConfig = {
@@ -19,33 +19,41 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
 app = Flask(__name__)
 
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    email = input("Enter your email: ")
-    password = input("Enter your password: ")
-    try:
-        user = auth.sign_in_with_email_and_password(email, password)
-        print("Successfully signed in")
-    except:
-        print("Invalid email or password")
-        return False
-    return True
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            user = auth.sign_in_with_email_and_password(email, password)
+            flash("Successfully signed in", 'success')
+            return redirect(url_for('Profile'))
+        except:
+            flash("Invalid email or password", 'error')
+            return redirect(url_for('Profile'))
+    return render_template("Profile.html")    
 
+@app.route("/signup", methods=['GET', 'POST'])
 def signup():
-    email = input("Enter your email: ")
-    password = input("Enter your password: ")
-    try:
-        user = auth.create_user_with_email_and_password(email, password)
-        print("Successfully signed up")
-    except:
-        print("Email already exists")
-        return False
-    return True
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        try:
+            user = auth.create_user_with_email_and_password(email, password)
+            flash("Successfully signed up", 'success')
+            return redirect(url_for('Profile'))
+        except:
+            flash("Email already exists", 'error')
+            return redirect(url_for('Profile'))
+    return render_template("Profile.html")
 
+'''
 ans = input("Do you have an account? (y/n): ")
 if ans == 'y':
     login()
 else:
     signup()
+'''
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
@@ -60,7 +68,7 @@ def report():
     rating = reports['report2023']['rating']
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
 
-@app.route("/profile")
+@app.route("/profile", methods=['GET'])
 def profile():
     name = "Oliver"
     apartments = [{'address': "2 Hillside St",
