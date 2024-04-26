@@ -24,9 +24,11 @@ def report(address):
     reports = find_issues_wrapper(address)
     rating = 0
   
-    rating =( reports['report2023']['rating'] + reports['report2022']['rating'] + reports['report2021']['rating'] +
-             reports['report2020']['rating'] +reports['report2019']['rating']) / 5
+    rating =( 5*reports['report2023']['rating'] + 4*reports['report2022']['rating'] + 3*reports['report2021']['rating'] +
+             2*reports['report2020']['rating'] +reports['report2019']['rating']) / 15
     
+    if rating < 0:
+        rating = 0
     rating = round(rating,1)
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
 
