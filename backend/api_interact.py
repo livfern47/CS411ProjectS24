@@ -18,6 +18,8 @@ def find_issues_wrapper(address):
     reports = {}
     for year,key in keys:
         report = find_issues(address, key)
+        if report == -1:
+            return -1
         reports['report' + year] = report
 
     return reports
@@ -37,8 +39,8 @@ def find_issues(address,key):
     }
 
     latlong = address_to_latlong(address)
-    # Should dump the dictionary into a string ("for posting")
-    data_string = urllib.parse.urlparse(json.dumps(dataset_dict))
+    if latlong == -1:
+        return -1
 
     lon1 = str((latlong["long"] + 0.000225)) 
     lon2 = str(latlong["long"] - 0.000225) 
@@ -66,14 +68,7 @@ def find_issues(address,key):
             filtered_data.append(item)
     
     report = []
-    # Rankings: 
-    # -0.25 : "Aircraft Noise Disturbance", "Animal Noise Disturbances", "Automotive Noise Disturbance", 
-    #'Dumpster & Loading Noise Disturbances', "Loud Parties/Music/People", "Undefined Noise Disturbance", "Unshoveled Sidewalk"
-    # -0.5 "Improper Storage of Trash (Barrels)", "No Utilities Residential - Gas", "No Utilities Residential - Electricity",
-    # "No Utilities Residential - Water", "Student Move-in Issues", "Student Overcrowding", "Unsatisfactory Utilities - Electrical Plumbing"
-    # -2 "Bed Bugs", "Mice Infestation - Residential","Pest Infestation - Residential", "Chronic Dampness/Mold",
-        #"Unsatisfactory Living Conditions", 'Carbon Monoxide', "Heat - Excessive Insufficient"
-        #"Poor Conditions of Property", "Rat Bite", "Rodent Activity", "Squalid Living Conditions"
+   
     hit_list_25 = ["Aircraft Noise Disturbance", "Animal Noise Disturbances", "Automotive Noise Disturbance", 
                    'Dumpster & Loading Noise Disturbances', "Loud Parties/Music/People", "Undefined Noise Disturbance", "Unshoveled Sidewalk"]
     hit_list_5 = ["Improper Storage of Trash (Barrels)", "No Utilities Residential - Gas", "No Utilities Residential - Electricity",
@@ -137,6 +132,8 @@ def address_to_latlong (address):
     response = requests.get(url+geocoder_key, headers=headers, params=params)
     file = response.json()
     #print(find_by_key(file, "lat"))
+    if len(file['features']) == 0:
+        return -1
 
     latlong = {
         "long" : 0,
@@ -159,4 +156,4 @@ def find_by_key(data, target):
 
 
 
-#print(type(find_issues_wrapper("2 Hillside St Mission Hill MA 02120")['report2020']['rating']))
+print(find_issues_wrapper("asdfg"))

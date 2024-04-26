@@ -103,6 +103,15 @@
     transform: translate(-50%, -50%);
 
   }
+
+  .alert {
+
+    padding: 20px;
+    margin: 5px;
+    color: #970020;
+    background-color: #ffd5de;
+    text-align: center;
+  }
 </style>
 
 
@@ -120,6 +129,12 @@
   <i class="fa fa-user fa-2x"></i></button>
 
 
+<div>
+  {% for message in get_flashed_messages() %}
+  <div class="alert" style="position:absolute;top:50%; width:25%;left: 50%;
+  transform: translate(-50%, -50%);">{{ message }}</div>
+  {% endfor %}
+</div>
 <form class="search_bar" method="post">
   <input type="text" name="address" value="{{ request.form['address'] }}" placeholder="Street address"> </input>
 
