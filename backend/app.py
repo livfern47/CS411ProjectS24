@@ -2,22 +2,27 @@
 # CKAN API, used by Boston 311
 
 from api_interact import find_issues_wrapper
-from flask import Flask, render_template
+from flask import Flask, render_template, request, url_for, flash, redirect
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'c5089374a4f1b370064f8f337e7e89650b9347932d13e004'
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        address = request.form['address']
+        return redirect(url_for('report', address=address))
     return render_template("Home.html")
 
-@app.route("/apt_report")
-def report():
-    address = "2 Hillside St Mission Hill MA 02120"
+@app.route("/report/<address>", methods=['GET', 'POST'])
+def report(address):
     reports = find_issues_wrapper(address)
     rating = 0
   
     rating =( reports['report2023']['rating'] + reports['report2022']['rating'] + reports['report2021']['rating'] +
              reports['report2020']['rating'] +reports['report2019']['rating']) / 5
+    
+    rating = round(rating,1)
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
 
 @app.route("/profile")

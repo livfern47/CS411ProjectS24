@@ -101,7 +101,7 @@ def find_issues(address,key):
                     append=True
                     rating-=1
         if append:
-            report.append(item['type'] + " reported at " + item['location_street_name'] )
+            report.append(item['type'] + " reported at " + item['location_street_name'] + " on " + (item['open_dt'])[:10])
 
     value ={
         'issues': report,
