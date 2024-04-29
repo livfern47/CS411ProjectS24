@@ -8,18 +8,15 @@ firebaseConfig = {
         'messagingSenderId': "412201567680",
         'appId': "1:412201567680:web:f53080566635a954187425",
         'measurementId': "G-VR2EDWMR3X",
-        'databaseURL':''
+        'databaseURL':'https://apartments-8578b-default-rtdb.firebaseio.com/'
 }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 auth = firebase.auth()
+db = firebase.database()
 
-email = 'test2@gmail.com'
-password = '123456'
 
-# user = auth.create_user_with_email_and_password(email,password)
-# print(user)
+def get_name(username):
+    info =(db.child("users").child(username).child("name").get())
+    return info.val()
 
-user = auth.sign_in_with_email_and_password(email,password)
-info = auth.get_account_info(user['idToken'])
-print(info)

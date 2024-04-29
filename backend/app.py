@@ -2,7 +2,7 @@
 # CKAN API, used by Boston 311
 
 from api_interact import find_issues_wrapper, address_to_latlong
-from flask import Flask, render_template, request, url_for, flash, redirect, session
+from flask import Flask, render_template, request, url_for, flash, redirect, session, jsonify
 import sys
 import pyrebase
 
@@ -14,11 +14,12 @@ config = {
         'messagingSenderId': "412201567680",
         'appId': "1:412201567680:web:f53080566635a954187425",
         'measurementId': "G-VR2EDWMR3X",
-        'databaseURL':''
+        'databaseURL':'https://apartments-8578b-default-rtdb.firebaseio.com/'
 }
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
+db = firebase.database()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'c5089374a4f1b370064f8f337e7e89650b9347932d13e004'
@@ -28,35 +29,51 @@ def index():
     if('user' in session):
         return redirect('/home')
     if request.method == 'POST':
+        username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-
+    
         try: 
             user = auth.sign_in_with_email_and_password(email,password)
-            session['user'] = email
+            session['user'] = username
             return redirect('/home')
         except:
             return "Failed to login"
     return render_template('Login.html')
+
+
 
 @app.route('/signup', methods = ['GET' ,'POST'])
 def signup():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        name = request.form.get('name')
+        username = request.form.get('username')
 
-        try: 
-            user = auth.create_user_with_email_and_password(email,password)
-            session['user'] = email
-            return redirect('/profile')
-        except:
-            return "Sign up unsuccessful. Please try again."
+        # try: 
+        user = auth.create_user_with_email_and_password(email,password)
+        session['user'] = username
+        # if user != None:
+        #     for user in all_users.each():
+        #         if user.key() == username:
+        #             return "Username already taken. Try again."
+
+        data = {'name': name, 'apts':[]}
+        db.child("users").child(username).set(data)
+        return redirect('/profile')
+        # except:
+        #     return "Sign up unsuccessful. Please try again."
     return render_template('Signup.html')
+
+
 
 @app.route('/logout')
 def logout():
     session.pop('user')
     return redirect('/')
+
+
 
 @app.route("/home", methods=['GET', 'POST'])
 def home():
@@ -68,6 +85,8 @@ def home():
         else:
             return redirect(url_for('report', address=address))
     return render_template("Home.html")
+
+
 
 @app.route("/report/<address>", methods=['GET', 'POST'])
 def report(address):
@@ -82,9 +101,14 @@ def report(address):
     rating = round(rating,1)
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
 
+
+
 @app.route("/profile")
 def profile():
-    name = session['user']
+    username = session['user']
+    info =(db.child("users").child(username).child("name").get())
+    name = info.val()
+
 
     apartments = [{'address': "2 Hillside St",
          'lon' : -71.0991603,
