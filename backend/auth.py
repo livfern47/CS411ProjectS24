@@ -20,3 +20,18 @@ def get_name(username):
     info =(db.child("users").child(username).child("name").get())
     return info.val()
 
+apt_info = {'address': "418 Ashmont St Dorchester MA 02124",
+         'lon' :"-71.05606059799678",
+         'lat': "42.28819952256786",
+         'rating': 9}
+
+
+username="test0"
+apts = db.child("users").child(username).child("apts").get()
+apts_lst = []
+apts_lst= apts_lst + [apt_info]
+print(apts_lst)
+db.child("users").child(username).update({'apts' : apts_lst})
+
+apts=db.child("users").child(username).child("apts").get()
+print(apts.val())

@@ -59,7 +59,7 @@ def signup():
         #         if user.key() == username:
         #             return "Username already taken. Try again."
 
-        data = {'name': name, 'apts':[]}
+        data = {'name': name, 'apts':[(0,0)]}
         db.child("users").child(username).set(data)
         return redirect('/profile')
         # except:
@@ -99,6 +99,19 @@ def report(address):
     if rating < 0:
         rating = 0
     rating = round(rating,1)
+
+
+    latlon = address_to_latlong(address)
+    apt_info = {'address': address,
+         'lon' :latlon['long'],
+         'lat': latlon['lat'],
+         'rating': rating}
+    username=session['user']
+    apts = db.child("users").child(username).child("apts").get()
+    apts_lst = apts.val()
+    apts_lst = apts_lst= apts_lst + [apt_info]
+    db.child("users").child(username).update({'apts' : apts_lst})
+
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
 
 
@@ -110,9 +123,7 @@ def profile():
     name = info.val()
 
 
-    apartments = [{'address': "2 Hillside St",
-         'lon' : -71.0991603,
-         'lat': 42.3290705,
-         'rating': 4}]
-    
+    apartments = db.child("users").child(username).child("apts").get()
+    apartments = apartments.val() 
+
     return render_template("Profile.html", name = name, apartments=apartments)

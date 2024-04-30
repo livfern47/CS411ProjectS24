@@ -50,12 +50,14 @@
       z-index: 2;
     }
 
-    .profile_btn {
+    .logout_btn {
       top: 3%;
       left: 95%;
       width: 40px;
       height: 40px;
       position: absolute;
+      font-family: monaco;
+      font-weight: bold;
       z-index: 2;
     }
 
@@ -110,8 +112,8 @@
     <button class="home_btn" id="Enter" type="button" onclick="window.location.href = '{{ url_for('home') }}' ; "
       class="button"><i class="fa fa-home fa-2x"></i></button>
 
-    <button class="profile_btn" id="Enter" type="button" onclick="window.location.href = '{{ url_for('profile') }}' ; ">
-      <i class="fa fa-user fa-2x"></i></button>
+    <button class="logout_btn" id="Enter" type="button" onclick="window.location.href = '{{ url_for('logout') }}' ; ">
+      Logout</button>
 
 
   </div>
@@ -122,8 +124,13 @@
 
   <div class="apt_list">
     {% for apt in apartments %}
-
+    {% if apt['rating'] > 7 %}
     <p> <i style="color: #2AD683" class="fa fa-map-marker"></i> {{apt['address']}}</p>
+    {% elif apt['rating'] > 4 %}
+    <p> <i style="color: #FCB93B" class="fa fa-map-marker"></i> {{apt['address']}}</p>
+    {% else %}
+    <p> <i style="color: #FF4E4E" class="fa fa-map-marker"></i> {{apt['address']}}</p>
+    {% endif %}
     {% endfor %}
   </div>
 
@@ -141,19 +148,18 @@
     });
 
     // These markers will be created iteratively through the addresses that correspond with the user
-    var apartments = JSON.parse('{{apartments | tojson | safe }}')
-
+    var apartments = JSON.parse('{{apartments | tojson }}')
     for (let i = 0; i < apartments.length; i++) {
       mkrclr = "#FF4E4E"
-      // if ((apartments[i]['rating']) > 7) {
-      //   mkrclr = "#2AD683"
-      // } else if ((apartments[i]['rating']) > 4) {
-      //   mkrclr = "#E1EF5C"
-      // }
+      if ((apartments[i]['rating']) > 7) {
+        mkrclr = "#2AD683"
+      } else if ((apartments[i]['rating']) > 4) {
+        mkrclr = "#FCB93B"
+      }
       const marker = new mapboxgl.Marker({
-        color: "#FF4E4E",
+        color: mkrclr,
         draggable: true
-      }).setLngLat([-71.0991603, 42.3290705])
+      }).setLngLat([apartments[i]['lon'], apartments[i]['lat']])
         .addTo(map);
     }
 
