@@ -6,24 +6,31 @@ from flask import Flask, render_template, request, url_for, flash, redirect, ses
 import sys
 import pyrebase
 
+# Read secret information from ignored file
+keys = open("key.txt")
+
+# FIREBASE SETUP
 config = {
-        'apiKey': "AIzaSyCmH1QKp1t4y_gsNJ-63_NbsRHGlWuxGy0",
-        'authDomain': "apartments-8578b.firebaseapp.com",
-        'projectId': "apartments-8578b",
-        'storageBucket': "apartments-8578b.appspot.com",
-        'messagingSenderId': "412201567680",
-        'appId': "1:412201567680:web:f53080566635a954187425",
-        'measurementId': "G-VR2EDWMR3X",
-        'databaseURL':'https://apartments-8578b-default-rtdb.firebaseio.com/'
+        'apiKey': keys.readline(),
+        'authDomain': keys.readline(),
+        'projectId': keys.readline(),
+        'storageBucket':  keys.readline(),
+        'messagingSenderId':  keys.readline(),
+        'appId':  keys.readline(),
+        'measurementId':  keys.readline(),
+        'databaseURL': keys.readline(),
 }
 
 firebase = pyrebase.initialize_app(config)
 auth = firebase.auth()
 db = firebase.database()
 
+# APP SETUP 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'c5089374a4f1b370064f8f337e7e89650b9347932d13e004'
+app.config['SECRET_KEY'] = keys.readline()
+keys.close()
 
+# SIGN IN
 @app.route('/', methods = ['GET', 'POST'])
 def index():
     if('user' in session):
@@ -43,6 +50,7 @@ def index():
 
 
 
+# SIGN UP
 @app.route('/signup', methods = ['GET' ,'POST'])
 def signup():
     if request.method == 'POST':
@@ -51,30 +59,26 @@ def signup():
         name = request.form.get('name')
         username = request.form.get('username')
 
-        # try: 
+
         user = auth.create_user_with_email_and_password(email,password)
         session['user'] = username
-        # if user != None:
-        #     for user in all_users.each():
-        #         if user.key() == username:
-        #             return "Username already taken. Try again."
+
 
         data = {'name': name, 'apts':[(0,0)]}
         db.child("users").child(username).set(data)
         return redirect('/profile')
-        # except:
-        #     return "Sign up unsuccessful. Please try again."
+
     return render_template('Signup.html')
 
 
-
+# LOG OUT
 @app.route('/logout')
 def logout():
     session.pop('user')
     return redirect('/')
 
 
-
+# ADDRESS INPUT
 @app.route("/home", methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
@@ -87,7 +91,7 @@ def home():
     return render_template("Home.html")
 
 
-
+# GENERATE REPORT FOR ADDRESS
 @app.route("/report/<address>", methods=['GET', 'POST'])
 def report(address):
     reports = find_issues_wrapper(address)
@@ -115,7 +119,7 @@ def report(address):
     return render_template("SearchResult.html", address=address, reports=reports, rating=rating)
 
 
-
+# SHOW PROFILE
 @app.route("/profile")
 def profile():
     username = session['user']
