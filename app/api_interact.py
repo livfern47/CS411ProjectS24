@@ -8,6 +8,7 @@ from requests.structures import CaseInsensitiveDict
 
 
 def find_issues_wrapper(address):
+    # Public keys found on the Boston311 website
     key_2023 = ('2023', 'e6013a93-1321-4f2a-bf91-8d8a02f1e62f')
     key_2022 = ('2022','81a7b022-f8fc-4da5-80e4-b160058ca207')
     key_2021 = ('2021','f53ebccd-bc61-49f9-83db-625f209c95f5')
@@ -30,7 +31,6 @@ def find_issues(address,key):
     # with the geocoder API, then search the 311 data for relevant hits within
     # one city block.
     
-
     # This structure taken from https://docs.ckan.org/en/2.9/api/. Modified.
     dataset_dict = {
         'name': 'boston311',
@@ -69,6 +69,7 @@ def find_issues(address,key):
     
     report = []
    
+    # Boston311 issues deemed relevant to apartment conditions
     hit_list_5 = ["Aircraft Noise Disturbance", "Animal Noise Disturbances", "Automotive Noise Disturbance", 
                    'Dumpster & Loading Noise Disturbances', "Loud Parties/Music/People", "Undefined Noise Disturbance", "Unshoveled Sidewalk"]
     hit_list_1 = ["Improper Storage of Trash (Barrels)", "No Utilities Residential - Gas", "No Utilities Residential - Electricity",
@@ -156,4 +157,3 @@ def find_by_key(data, target):
 
 
 
-print(find_issues_wrapper("asdfg"))
